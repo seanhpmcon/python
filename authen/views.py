@@ -19,4 +19,4 @@ def login(request):
 @csrf_exempt
 def logout(request):
     del request.session['ldap_name']
-    return redirect('/attendance/login')
+    return redirect('/auth/login')
