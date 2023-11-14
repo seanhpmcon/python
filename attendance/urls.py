@@ -1,5 +1,5 @@
 """
-URL configuration for zkmain project.
+URL configuration for zkcvapi project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -15,9 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from attendance import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('attendance/', include('attendance.urls')),
+    path('', views.home, name="home"),
+    path('remove', views.remove_employees),
+    path('upload', views.upload_file),
+    path('login', views.login),
+    path('logout', views.logout),
+    path('test', views.test),
 ]
