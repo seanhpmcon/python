@@ -22,7 +22,5 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('remove', views.remove_employees),
     path('upload', views.upload_file),
-    path('login', views.login),
-    path('logout', views.logout),
     path('test', views.test),
 ]

@@ -44,23 +44,6 @@ def upload_file(request):
     return render(request, 'upload.html', {'form': form})
 
 @csrf_exempt
-def login(request):
-    if request.method == 'POST':
-        pass
-    if request.GET.get('login'):
-        fail = True
-    else:
-        fail = False
-    # template = loader.get_template('login.html')
-    # return HttpResponse(template.render({'fail': 'fail'}, request))
-    return render(request, 'login.html', {'fail': fail})
-
-@csrf_exempt
-def logout(request):
-    del request.session['ldap_name']
-    return redirect('/attendance/login')
-
-@csrf_exempt
 def test(request):
     un = request.session['ldap_name']
     return render(request, 'test.html', {'un': un})
