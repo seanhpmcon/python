@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'zkmain',
     'rest_framework',
-    'attendance'
+    'attendance',
+    'authen'
 ]
 
 MIDDLEWARE = [
