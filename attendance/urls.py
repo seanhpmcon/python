@@ -18,6 +18,7 @@ from django.urls import path
 from attendance import views
 
 urlpatterns = [
-    path('', views.input_enroll, name="input_enroll"),
-    path('upload', views.upload_enroll),
+    path('', views.input_unenroll, name="input_unenroll"),
+    path('upload', views.upload_unenroll),
+    path('clock_unenroll', views.clock_unenroll),
 ]
