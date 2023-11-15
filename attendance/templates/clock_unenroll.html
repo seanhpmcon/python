@@ -1,9 +1,9 @@
 {% include "header.html" %}
     <div class="container mt-5">
-        <h1>Badge Form</h1>
+        <h1>Clock Input</h1>
         <form method="post" action="{% url 'clock_unenroll' %}">
             <div class="mb-3">
-                <label for="clockInput" class="form-label">Badge</label>
+                <label for="clockInput" class="form-label">Clock</label>
                 <input type="text" class="form-control" id="clockInput" name="clock" placeholder="Enter a Clock Area">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
