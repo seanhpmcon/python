@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'zkmain',
     'rest_framework',
     'attendance',
-    'authen'
+    'authen',
+    'base'
 ]
 
 MIDDLEWARE = [
