@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+# from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.template import loader
-from django.shortcuts import render
 import pandas as pd
 from .funcs import remove_emp, string_to_list, remove_excel_emp
 from .forms import UploadFileForm, BootstrapErrorList
