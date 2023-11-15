@@ -13,14 +13,6 @@ from .forms import UploadFileForm, BootstrapErrorList
 
 # Create your views here.
 @csrf_exempt
-@api_view(['POST'])
-def remove_employees(request, response):
-    badge = request.data
-    remove_emp(badge["badges"], request.session['ldap_name'])
-    return Response(badge, status=status.HTTP_200_OK)
-
-
-@csrf_exempt
 def home(request):
     if request.method == 'POST':
         badges = request.POST.get('badges')
@@ -43,8 +35,3 @@ def upload_file(request):
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
-
-@csrf_exempt
-def test(request):
-    un = request.session['ldap_name']
-    return render(request, 'test.html', {'un': un})

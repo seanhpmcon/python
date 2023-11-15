@@ -20,7 +20,5 @@ from attendance import views
 
 urlpatterns = [
     path('', views.home, name="home"),
-    path('remove', views.remove_employees),
     path('upload', views.upload_file),
-    path('test', views.test),
 ]
