@@ -1,3 +1,5 @@
+from ast import List
+from typing import Any
 from django.shortcuts import render
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
@@ -14,8 +16,8 @@ from .forms import UploadFileForm, BootstrapErrorList
 @csrf_exempt
 def home(request):
     if request.method == 'POST':
-        badges = request.POST.get('badges')
-        list_of_badges = string_to_list(badges)
+        badges: str = request.POST.get('badges')
+        list_of_badges: List[int] = string_to_list(badges)
         for badge in list_of_badges:
             remove_emp(badge, request.session['ldap_name'])
     template = loader.get_template('home.html')
@@ -25,12 +27,12 @@ def home(request):
 @csrf_exempt
 def upload_file(request):
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES, error_class=BootstrapErrorList)
+        form: UploadFileForm = UploadFileForm(request.POST, request.FILES, error_class=BootstrapErrorList)
         if form.is_valid():
             excel_file = request.FILES['file']
-            df = pd.read_excel(excel_file)
+            df: pd.DataFrame = pd.read_excel(excel_file)
             df.apply(remove_excel_emp, axis=1, user=request.session['ldap_name'])
             return render(request, 'success.html')
     else:
-        form = UploadFileForm()
+        form: UploadFileForm = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
