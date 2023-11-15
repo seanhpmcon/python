@@ -18,6 +18,6 @@ from django.urls import path
 from attendance import views
 
 urlpatterns = [
-    path('', views.home, name="home"),
-    path('upload', views.upload_file),
+    path('', views.input_enroll, name="input_enroll"),
+    path('upload', views.upload_enroll),
 ]

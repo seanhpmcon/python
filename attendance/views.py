@@ -14,7 +14,7 @@ from .forms import UploadFileForm, BootstrapErrorList
 
 # Create your views here.
 @csrf_exempt
-def home(request):
+def input_enroll(request):
     if request.method == 'POST':
         badges: str = request.POST.get('badges')
         list_of_badges: List[int] = string_to_list(badges)
@@ -25,7 +25,7 @@ def home(request):
 
 
 @csrf_exempt
-def upload_file(request):
+def upload_enroll(request):
     if request.method == 'POST':
         form: UploadFileForm = UploadFileForm(request.POST, request.FILES, error_class=BootstrapErrorList)
         if form.is_valid():
