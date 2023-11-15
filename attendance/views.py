@@ -20,7 +20,7 @@ def home(request):
         list_of_badges: List[int] = string_to_list(badges)
         for badge in list_of_badges:
             remove_emp(badge, request.session['ldap_name'])
-    template = loader.get_template('home.html')
+    template: Any = loader.get_template('home.html')
     return HttpResponse(template.render())
 
 
