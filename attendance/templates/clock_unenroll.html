@@ -4,7 +4,11 @@
         <form method="post" action="{% url 'clock_unenroll' %}">
             <div class="mb-3">
                 <label for="clockInput" class="form-label">Clock</label>
-                <input type="text" class="form-control" id="clockInput" name="clock" placeholder="Enter a Clock Area">
+                <select type="text" class="form-select" id="clock" name="clock">
+                    {% for id, name in clocks.items %}
+                    <option value="{{ id }}">{{ id }} - {{ name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

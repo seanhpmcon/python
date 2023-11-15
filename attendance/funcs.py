@@ -1,7 +1,7 @@
 import pyodbc
 import requests
 import jellyfish
-from typing import List
+from typing import List, Dict
 
 def remove_emp(emp_no, user):
 
@@ -95,6 +95,27 @@ def remove_by_clock(clock_no):
 
     conn.commit()
     cursor.close()
+
+def get_areas():
+
+    conn_str = ("Driver={ODBC Driver 17 for SQL Server};Server=TTBRCDB001;Database=ZKCVBS_PRD;UID=zkcvbs_rpt_svc;PWD=mdmAMg3K$j#D^c~EXUYoJo%9V2zq$F;")
+
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+
+    res = cursor.execute("""select code, name
+                            from [dbo].[auth_area]
+                            """)
+
+    clocks: Dict[int, str] = {}
+
+    for row in res.fetchall():
+        clocks[int(row[0])] = row[1]
+
+    conn.commit()
+    cursor.close()
+
+    return clocks
     
 def string_to_list(input_string):
     badges = input_string.split(',')

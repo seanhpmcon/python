@@ -1,4 +1,4 @@
-from ast import List
+from ast import Dict, List
 from typing import Any
 from django.shortcuts import render
 # from rest_framework.decorators import api_view
@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.template import loader
 import pandas as pd
-from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock
+from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas
 from .forms import UploadFileForm, BootstrapErrorList
 
 
@@ -43,5 +43,5 @@ def clock_unenroll(request):
     if request.method == 'POST':
         clock: str = request.POST.get('clock')
         remove_by_clock(int(clock))
-    template: Any = loader.get_template('clock_unenroll.html')
-    return HttpResponse(template.render())
+    clocks: Dict[int, str] = get_areas()
+    return render(request, 'clock_unenroll.html', {'clocks': clocks})
