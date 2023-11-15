@@ -1,6 +1,7 @@
 import pyodbc
 import requests
 import jellyfish
+from typing import List
 
 def remove_emp(emp_no, user):
 
@@ -68,6 +69,32 @@ def remove_excel_emp(emp_no, user):
     local_conn.commit()
     cursor.close()
     local_cursor.close()
+
+def remove_by_clock(clock_no):
+
+    conn_str = ("Driver={ODBC Driver 17 for SQL Server};Server=TTBRCDB001;Database=ZKCVBS_PRD;UID=zkcvbs_rpt_svc;PWD=mdmAMg3K$j#D^c~EXUYoJo%9V2zq$F;")
+
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+
+    res = cursor.execute("""select pp.pin, pp.name, pp.last_name
+                            from [dbo].[att_area_person] aap
+                            join [dbo].[pers_person] pp on aap.pers_person_id = pp.id
+                            join [dbo].[auth_area] aa on aap.auth_area_id = aa.id
+                            where aa.code = '%s'""" % (clock_no))
+
+    emps: List[int] = []
+
+    for row in res.fetchall():
+        emps.append(row[0])
+
+    requests.post('https://security.pmcon.co.tt/api/attAreaPerson/delete?access_token=11A61DC602A18E97E1A52CD37099F7BFFFD2A1769F1B6CA1F5375159F42B2D5C', json={
+        "code": str(clock_no),
+        "pins": emps
+    }, verify=False)
+
+    conn.commit()
+    cursor.close()
     
 def string_to_list(input_string):
     badges = input_string.split(',')
