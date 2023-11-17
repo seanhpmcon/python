@@ -11,8 +11,6 @@ def login(request):
         fail = True
     else:
         fail = False
-    # template = loader.get_template('login.html')
-    # return HttpResponse(template.render({'fail': 'fail'}, request))
     return render(request, 'login.html', {'fail': fail})
 
 @csrf_exempt

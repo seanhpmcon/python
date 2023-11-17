@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from ldap3 import Server, Connection
+from .funcs import auth_user
 
 class LDAPAuthMiddleware:
     def __init__(self, get_response):
@@ -18,6 +19,9 @@ class LDAPAuthMiddleware:
             if not conn.bind():
                 return redirect('/auth/login?login=fail1')
             
+            if not auth_user(un):
+                return redirect('/auth/login?login=fail1')
+
             request.session['ldap_name'] = un
             
         if 'ldap_name' not in request.session and request.path != '/auth/login':
