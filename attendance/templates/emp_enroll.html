@@ -1,0 +1,12 @@
+{% include "header.html" %}
+    <div class="container mt-5">
+        <h1>Badge Form</h1>
+        <form method="post" action="{% url 'emp_enroll' %}">
+            <div class="mb-3">
+                <label for="badgeInput" class="form-label">Badge</label>
+                <input type="text" class="form-control" id="badgeInput" name="badges" placeholder="Enter your badge">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% include "footer.html" %}

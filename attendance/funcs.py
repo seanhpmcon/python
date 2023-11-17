@@ -116,6 +116,40 @@ def get_areas():
     cursor.close()
 
     return clocks
+
+def enroll_emp(badges):
+
+    conn_str = ("Driver={ODBC Driver 17 for SQL Server};Server=TTBRCDB001;Database=ZKCVBS_PRD;UID=zkcvbs_rpt_svc;PWD=mdmAMg3K$j#D^c~EXUYoJo%9V2zq$F;")
+
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+
+    res = cursor.execute("""select aa.code, pp.pin
+                            from [pmcon].[dept_area_mapping] dam
+                            join [dbo].[auth_area] aa on dam.auth_area_code = aa.code
+                            join [dbo].[auth_department] ad on dam.auth_dept_code = ad.code
+                            join [dbo].[pers_person] pp on ad.id = pp.auth_dept_id
+                            where pp.pin in (%s)""" % (badges))
+
+    clocks: Dict[int, List] = {}
+
+    for row in res.fetchall():
+        if int(row[0]) in clocks:
+            clocks[int(row[0])].append(int(row[1]))
+        else:
+            clocks[int(row[0])] = []
+            clocks[int(row[0])].append(int(row[1]))
+
+    conn.commit()
+    cursor.close()
+
+    for k, v in clocks.items():
+        requests.post('https://security.pmcon.co.tt/api/attAreaPerson/set?access_token=11A61DC602A18E97E1A52CD37099F7BFFFD2A1769F1B6CA1F5375159F42B2D5C', json={
+        "code": str(k),
+        "pins": v
+        }, verify=False)
+
+    return clocks
     
 def string_to_list(input_string):
     badges = input_string.split(',')

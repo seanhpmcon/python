@@ -8,11 +8,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.template import loader
 import pandas as pd
-from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas
+from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas, enroll_emp
 from .forms import UploadFileForm, BootstrapErrorList
 
 
 # Create your views here.
+#unenrollment
 @csrf_exempt
 def input_unenroll(request):
     if request.method == 'POST':
@@ -45,3 +46,13 @@ def clock_unenroll(request):
         remove_by_clock(int(clock))
     clocks: Dict[int, str] = get_areas()
     return render(request, 'clock_unenroll.html', {'clocks': clocks})
+
+
+#enrollment
+@csrf_exempt
+def emp_enroll(request):
+    if request.method == 'POST':
+        badges: str = request.POST.get('badges')
+        enroll_emp(badges)
+    template: Any = loader.get_template('emp_enroll.html')
+    return HttpResponse(template.render())
