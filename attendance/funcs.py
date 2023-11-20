@@ -1,3 +1,5 @@
+from numpy import NaN
+import pandas as pd
 import pyodbc
 import requests
 import jellyfish
@@ -150,6 +152,45 @@ def enroll_emp(badges):
         }, verify=False)
 
     return clocks
+
+def upload_enrollf(df):
+    emp_list = df[df.columns[0]].values.tolist()
+
+    emp_string = ','.join([str(i) for i in emp_list])
+
+    conn_str = ("Driver={ODBC Driver 17 for SQL Server};Server=TTBRCDB001;Database=ZKCVBS_PRD;UID=zkcvbs_rpt_svc;PWD=mdmAMg3K$j#D^c~EXUYoJo%9V2zq$F;")
+
+    conn = pyodbc.connect(conn_str)
+
+    sql = """select pp.pin, pp.name, pp.last_name, aa.code
+    from [pmcon].[dept_area_mapping] dam
+    join [dbo].[auth_area] aa on dam.auth_area_code = aa.code
+    join [dbo].[auth_department] ad on dam.auth_dept_code = ad.code
+    join [dbo].[pers_person] pp on ad.id = pp.auth_dept_id
+    where pp.pin in (%s)""" % (emp_string)
+
+    sql_df = pd.read_sql(sql, conn, dtype={'pin':int, 'name':str, 'last_name':str})
+
+    # print(sql_df.info())
+    merged_df = pd.merge(df, sql_df, left_on='employee_pin', right_on='pin', how='left').replace(NaN, '')
+
+    def name_check(emp_no):
+        if jellyfish.jaro_distance(emp_no.iloc[1].lower(),emp_no.iloc[4].lower()) > 0.7 and jellyfish.jaro_distance(emp_no.iloc[2].lower(),emp_no.iloc[5].lower()) > 0.7:
+            return 1
+        else:
+            return 0
+        
+    merged_df['to_run'] = merged_df.apply(name_check, axis=1)
+
+    grouped = merged_df.groupby("code")
+
+    for area, group in grouped:
+        if area != '':
+            requests.post('https://security.pmcon.co.tt/api/attAreaPerson/set?access_token=11A61DC602A18E97E1A52CD37099F7BFFFD2A1769F1B6CA1F5375159F42B2D5C', json={
+            "code": str(area),
+            "pins": group['pin'].values.tolist()
+            }, verify=False)
+
     
 def string_to_list(input_string):
     badges = input_string.split(',')
@@ -157,3 +198,9 @@ def string_to_list(input_string):
     cleaned_badges = [badge.strip() for badge in badges]
 
     return cleaned_badges
+
+def name_check(emp_no):
+    if jellyfish.jaro_distance(emp_no.iloc[1].lower(),emp_no.iloc[4].lower()) > 0.7 and jellyfish.jaro_distance(emp_no.iloc[2].lower(),emp_no.iloc[5].lower()) > 0.7:
+        return 1
+    else:
+        return 0

@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.template import loader
 import pandas as pd
-from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas, enroll_emp
+from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas, enroll_emp, upload_enrollf
 from .forms import UploadFileForm, BootstrapErrorList
 
 
@@ -53,3 +53,16 @@ def emp_enroll(request):
         enroll_emp(badges)
     template: Any = loader.get_template('emp_enroll.html')
     return HttpResponse(template.render())
+
+@csrf_exempt
+def upload_enroll(request):
+    if request.method == 'POST':
+        form: UploadFileForm = UploadFileForm(request.POST, request.FILES, error_class=BootstrapErrorList)
+        if form.is_valid():
+            excel_file = request.FILES['file']
+            df: pd.DataFrame = pd.read_excel(excel_file)
+            upload_enrollf(df)
+            return render(request, 'success.html')
+    else:
+        form: UploadFileForm = UploadFileForm()
+    return render(request, 'upload_enroll.html', {'form': form})
