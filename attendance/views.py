@@ -1,12 +1,13 @@
 from ast import Dict, List
 from typing import Any
 from django.shortcuts import render
+from django.urls import is_valid_path
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.template import loader
 import pandas as pd
-from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas, enroll_emp, upload_enrollf
-from .forms import UploadFileForm, BootstrapErrorList
+from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas, enroll_emp, upload_enrollf, clock_enrollf
+from .forms import UploadFileForm, BootstrapErrorList, UploadClockForm
 
 
 # Create your views here.
@@ -66,3 +67,17 @@ def upload_enroll(request):
     else:
         form: UploadFileForm = UploadFileForm()
     return render(request, 'upload_enroll.html', {'form': form})
+
+@csrf_exempt
+def clock_enroll(request):
+    if request.method == 'POST':
+        form: UploadClockForm = UploadClockForm(request.POST, request.FILES, error_class=BootstrapErrorList)
+        if form.is_valid():
+            excel_file = request.FILES['file']
+            clock: int = request.POST['clock']
+            df: pd.DataFrame = pd.read_excel(excel_file)
+            clock_enrollf(clock, df)
+            return render(request, 'success.html')
+    else:
+        form: UploadClockForm = UploadClockForm()
+    return render(request, 'clock_enroll.html', {'form': form})

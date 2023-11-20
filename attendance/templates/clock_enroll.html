@@ -1,0 +1,10 @@
+{% include "header.html" %}
+    <h1>Excel Upload</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit">Upload</button>
+    </form>
+{% include "footer.html" %}
