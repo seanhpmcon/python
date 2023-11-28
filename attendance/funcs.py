@@ -182,6 +182,8 @@ def upload_enrollf(df):
         
     merged_df['to_run'] = merged_df.apply(name_check, axis=1)
 
+    merged_df = merged_df[merged_df['to_run'] == 1]
+
     grouped = merged_df.groupby("code")
 
     for area, group in grouped:

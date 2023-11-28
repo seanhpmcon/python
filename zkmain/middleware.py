@@ -28,7 +28,7 @@ class LDAPAuthMiddleware:
             return redirect('/auth/login')
         
         if request.path == '/auth/login' and 'ldap_name' in request.session:
-            return redirect('/attendance/')
+            return redirect('/')
         
         response = self.get_response(request)
 
