@@ -8,5 +8,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Hello, HTML5!</h1>
-    <p>This is a simple HTML5 page.</p>
+    <nav class="navbar navbar-expand navbar-dark" style="background-color: rgb(13, 105, 33);">
+        <div class="container">
+            <a href="#" class="navbar-brand">Enrollment System</a>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Enrollment
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{% url 'emp_enroll' %}">Enrollment by Employee</a></li>
+                        <li><a class="dropdown-item" href="{% url 'upload_enroll' %}">Enrollment by Excel</a></li>
+                        <li><a class="dropdown-item" href="{% url 'clock_enroll' %}">Enrollment by Clock</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Unenrollment
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{% url 'input_unenroll' %}">Unenrollment by Employee</a></li>
+                        <li><a class="dropdown-item" href="{% url 'upload_unenroll' %}">Unenrollment by Excel Upload</a></li>
+                        <li><a class="dropdown-item" href="{% url 'clock_unenroll' %}">Unenrollment by Clocking Area</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    {% if 'ldap_name' not in request.session %}
+                    <a href="{% url 'login' %}" class="nav-link">Login</a>
+                    {% else %}
+                    <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </nav>

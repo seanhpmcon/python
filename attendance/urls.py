@@ -19,7 +19,7 @@ from attendance import views
 
 urlpatterns = [
     path('', views.input_unenroll, name="input_unenroll"),
-    path('upload', views.upload_unenroll),
+    path('upload', views.upload_unenroll, name="upload_unenroll"),
     path('clock_unenroll', views.clock_unenroll, name="clock_unenroll"),
     path('emp_enroll', views.emp_enroll, name="emp_enroll"),
     path('upload_enroll', views.upload_enroll, name="upload_enroll"),
