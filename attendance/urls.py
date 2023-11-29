@@ -24,4 +24,5 @@ urlpatterns = [
     path('emp_enroll', views.emp_enroll, name="emp_enroll"),
     path('upload_enroll', views.upload_enroll, name="upload_enroll"),
     path('clock_enroll', views.clock_enroll, name="clock_enroll"),
+    path('checklist', views.checklist, name="checklist"),
 ]

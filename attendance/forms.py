@@ -25,3 +25,13 @@ class UploadClockForm(forms.Form):
     
     clock = forms.ChoiceField(choices=clocks, widget=forms.Select(attrs={'class': 'form-select'}))
     file = forms.FileField(validators=[FileExtensionValidator(['xlsx', 'xls'])], widget=FileInput(attrs={'placeholder': 'Name', 'style': 'width: 300px;', 'class': 'form-control'}))
+
+#Checklist
+class ChecklistForm(forms.Form):
+    def clocks():
+        clock_dict: Dict[int, str] = get_areas()
+        clock_list: List[Tuple[any]] = [(k, v) for k, v in clock_dict.items()]
+        return clock_list
+    
+    clock = forms.MultipleChoiceField(choices=clocks, widget=forms.CheckboxSelectMultiple(attrs={'class': 'chosen'}))
+    file = forms.FileField(validators=[FileExtensionValidator(['xlsx', 'xls'])], widget=FileInput(attrs={'placeholder': 'Name', 'style': 'width: 300px;', 'class': 'form-control'}))

@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.template import loader
 import pandas as pd
 from .funcs import remove_emp, string_to_list, remove_excel_emp, remove_by_clock, get_areas, enroll_emp, upload_enrollf, clock_enrollf
-from .forms import UploadFileForm, BootstrapErrorList, UploadClockForm
+from .forms import UploadFileForm, BootstrapErrorList, UploadClockForm, ChecklistForm
 
 
 # Create your views here.
@@ -80,3 +80,19 @@ def clock_enroll(request):
     else:
         form: UploadClockForm = UploadClockForm()
     return render(request, 'clock_enroll.html', {'form': form})
+
+@csrf_exempt
+def checklist(request):
+    if request.method == 'POST':
+        form: ChecklistForm = ChecklistForm(request.POST, request.FILES, error_class=BootstrapErrorList)
+        if form.is_valid():
+            excel_file = request.FILES['file']
+            clocks: List = request.POST.getlist('clock')
+            df: pd.DataFrame = pd.read_excel(excel_file)
+            print('hit')
+            for clock in clocks:
+                print(clock)
+                clock_enrollf(clock, df)
+            return render(request, 'success.html')
+    form: ChecklistForm = ChecklistForm()
+    return render(request, 'checklist.html', {'form': form})
